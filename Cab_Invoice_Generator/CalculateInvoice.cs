@@ -26,6 +26,13 @@ namespace Cab_Invoice_Generator
                 costPerMin = 1;
                 minimumFare = 5;
             }
+            else if (rideType.Equals(RideType.Premium))
+            {
+                costPerKm = 15;
+                costPerMin = 2;
+                minimumFare = 20;
+            }
+
         }
         //calculates the fare
         public double CalculateFare(int time, double distance)
@@ -41,6 +48,26 @@ namespace Cab_Invoice_Generator
             }
             totalFare = distance * costPerKm + time * costPerMin;
             return Math.Max(minimumFare, totalFare);
+        }
+        public double CalculateAggregateFare(Ride[] rides)
+        {
+            double aggregateFare = 0;
+            if (rides.Length == 0)
+            {
+                throw new InvoiceCustomException(InvoiceCustomException.ExceptionType.INVALID_RIDE_COUNT, "Ivalid Ride List");
+            }
+            foreach (var ride in rides)
+            {
+                aggregateFare += CalculateFare(ride.time, ride.distance);
+            }
+            return aggregateFare;
+        }
+        public string InvoiceSummary(Ride[] rides)
+        {
+            double totalFare = CalculateAggregateFare(rides);
+            InvoiceSummary summary = new InvoiceSummary(rides.Length,totalFare);
+            return summary.ToString();
+           
         }
     }
 }

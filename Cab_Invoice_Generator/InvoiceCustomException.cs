@@ -11,7 +11,8 @@ namespace Cab_Invoice_Generator
         public string message;
         public enum ExceptionType
         {
-            INVALID_DISTANCE, INVALID_TIME
+            INVALID_DISTANCE, INVALID_TIME,
+            INVALID_RIDE_COUNT
         }
         public ExceptionType exceptionType;
         public InvoiceCustomException(ExceptionType type, string message) : base(message)

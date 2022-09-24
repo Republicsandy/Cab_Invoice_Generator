@@ -117,5 +117,26 @@ namespace UnitTest1
                 Assert.AreEqual(ex.Message, expected);
             }
         }
+        [TestMethod]
+        [TestCategory("Invoice Summary for normal rides")]
+        public void TestMethodToCheckInvoiceSummay()
+        {
+            CalculateInvoice calculate = new CalculateInvoice(CalculateInvoice.RideType.Normal);
+            Ride[] ride = { new Ride(3, 5.0), new Ride(6, 7.0) };
+            string actual = calculate.InvoiceSummary(ride);
+            string expected = "\nNo of rides: 0 \nTotal Fare: 129 \nAverage Fare: 64.5";
+            Assert.AreEqual(actual, expected);
+        }
+
+        [TestMethod]
+        [TestCategory("Invoice Summary for premium rides")]
+        public void TestMethodToCheckInvoiceSummayForPremiumRides()
+        {
+            CalculateInvoice calculate = new CalculateInvoice(CalculateInvoice.RideType.Premium);
+            Ride[] ride = { new Ride(3, 5.0), new Ride(6, 7.0) };
+            string actual = calculate.InvoiceSummary(ride);
+            string expected = "\nNo of rides: 2 \nTotal Fare: 198 \nAverage Fare: 99";
+            Assert.AreEqual(actual, expected);
+        }
     }
 }

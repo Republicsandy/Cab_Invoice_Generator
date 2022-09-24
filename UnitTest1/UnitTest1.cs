@@ -5,7 +5,7 @@ using Cab_Invoice_Generator;
 namespace UnitTest1
 {
     [TestClass]
-    public class Tests
+    internal class Tests
     {
         //UC1.1:Calculates the fare for normal ride
         [TestMethod]
@@ -56,6 +56,65 @@ namespace UnitTest1
             {
                 string expected = "Time should be greater than zero";
                 Assert.AreEqual(expected, ex.Message);
+            }
+        }
+        //Test case for time less than or equal to zero
+        [TestMethod]
+        [TestCategory("Calculate for invalid Time Premium Ride")]
+        public void InvalidTimeCalculateTotalFareForPremiumRide()
+        {
+            try
+            {
+                CalculateInvoice cabInvoiceCalculate = new CalculateInvoice(CalculateInvoice.RideType.Premium);
+                double distance = 12;
+                int time = 0;
+                cabInvoiceCalculate.CalculateFare(time, distance);
+
+            }
+            catch (InvoiceCustomException ex)
+            {
+                string expected = "Time should be greater than zero";
+                Assert.AreEqual(expected, ex.Message);
+            }
+        }
+        //UC2:Calculate aggregate fare for normal ride
+        [TestMethod]
+        [TestCategory("Calculate Aggregate Fare for normal ride")]
+        public void CalculateAggregateFare()
+        {
+            CalculateInvoice calculate = new CalculateInvoice(CalculateInvoice.RideType.Normal);
+            Ride[] ride = { new Ride(3, 5.0), new Ride(6, 7.0) };
+            double actual = calculate.CalculateAggregateFare(ride);
+            double expected = 129.0;
+            Assert.AreEqual(expected, actual);
+
+        }
+        //TC2.1:Calculate aggregate fare for premium ride
+        [TestMethod]
+        [TestCategory("Calculate Aggregate Fare for Premium ride")]
+        public void CalculateAggregateFareForPremiumRide()
+        {
+            CalculateInvoice calculate = new CalculateInvoice(CalculateInvoice.RideType.Premium);
+            Ride[] ride = { new Ride(3, 5.0), new Ride(6, 7.0) };
+            double actual = calculate.CalculateAggregateFare(ride);
+            double expected = 198.0;
+            Assert.AreEqual(expected, actual);
+        }
+        //TC2.2:Invalid Ride List Count
+        [TestMethod]
+        [TestCategory("Invalid Ride List")]
+        public void InvalidRideList()
+        {
+            try
+            {
+                CalculateInvoice calculate = new CalculateInvoice(CalculateInvoice.RideType.Premium);
+                Ride[] ride = { };
+                calculate.CalculateAggregateFare(ride);
+            }
+            catch (InvoiceCustomException ex)
+            {
+                string expected = "Ivalid Ride List";
+                Assert.AreEqual(ex.Message, expected);
             }
         }
     }
